@@ -7,23 +7,20 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Document = Microsoft.CodeAnalysis.Document;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Document = Microsoft.CodeAnalysis.Document;
 
-namespace Clave.Expressionify.Generator
-{
+namespace Clave.Expressionify.Generator {
 
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ExpressionifyCodeFixProvider)), Shared]
-    public class ExpressionifyCodeFixProvider : CodeFixProvider
-    {
+    public class ExpressionifyCodeFixProvider : CodeFixProvider {
         public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(
             ExpressionifyAnalyzer.StaticId,
             ExpressionifyAnalyzer.PartialClassId);
 
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
-        {
+        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context) {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             var diagnostic = context.Diagnostics.First();
@@ -51,13 +48,11 @@ namespace Clave.Expressionify.Generator
                     diagnostic);
         }
 
-        private static Task<Document> FixMissingStatic(Document contextDocument, SyntaxNode root, MethodDeclarationSyntax method)
-        {
+        private static Task<Document> FixMissingStatic(Document contextDocument, SyntaxNode root, MethodDeclarationSyntax method) {
             return Task.FromResult(contextDocument.WithSyntaxRoot(root.ReplaceNode(method, method.AddModifiers(Token(SyntaxKind.StaticKeyword)))));
         }
 
-        private static Task<Document> FixMissingPartial(Document contextDocument, SyntaxNode root, ClassDeclarationSyntax @class)
-        {
+        private static Task<Document> FixMissingPartial(Document contextDocument, SyntaxNode root, ClassDeclarationSyntax @class) {
             return Task.FromResult(contextDocument.WithSyntaxRoot(root.ReplaceNode(@class, @class.AddModifiers(Token(SyntaxKind.PartialKeyword)))));
         }
     }

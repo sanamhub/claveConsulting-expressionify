@@ -1,9 +1,7 @@
 using System;
 
-namespace Clave.Expressionify.Tests.First
-{
-    public static partial class ExtensionMethods
-    {
+namespace Clave.Expressionify.Tests.First {
+    public static partial class ExtensionMethods {
         [Expressionify]
         public static int ToInt(this string value) => Convert.ToInt32(value);
 

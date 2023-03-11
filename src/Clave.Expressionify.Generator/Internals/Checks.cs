@@ -3,10 +3,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Clave.Expressionify.Generator.Internals
-{
-    public static class Checks
-    {
+namespace Clave.Expressionify.Generator.Internals {
+    public static class Checks {
         public static bool HasExpressionifyAttribute(this MethodDeclarationSyntax m) =>
             m.AttributeLists.SelectMany(l => l.Attributes).Any(a => a.Name.ToString() == "Expressionify");
 

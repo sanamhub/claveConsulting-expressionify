@@ -5,30 +5,24 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 
-namespace Clave.Expressionify
-{
-    public class ExpressionableQuery<T> : IQueryable<T>, IOrderedQueryable<T>, IAsyncEnumerable<T>
-    {
+namespace Clave.Expressionify {
+    public class ExpressionableQuery<T> : IQueryable<T>, IOrderedQueryable<T>, IAsyncEnumerable<T> {
         private readonly ExpressionableQueryProvider _provider;
 
-        public ExpressionableQuery(ExpressionableQueryProvider provider, Expression expression)
-        {
+        public ExpressionableQuery(ExpressionableQueryProvider provider, Expression expression) {
             _provider = provider;
             Expression = expression;
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() {
             return _provider.ExecuteQuery<T>(Expression).GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+        IEnumerator IEnumerable.GetEnumerator() {
             return _provider.ExecuteQuery<T>(Expression).GetEnumerator();
         }
 
-        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-        {
+        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default) {
             return _provider.ExecuteQueryAsync<T>(Expression).GetAsyncEnumerator(cancellationToken);
         }
 

@@ -7,23 +7,18 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Clave.Expressionify
-{
-    public class ExpressionifyDbContextOptionsExtension : IDbContextOptionsExtension
-    {
-        public ExpressionifyDbContextOptionsExtension()
-        { }
+namespace Clave.Expressionify {
+    public class ExpressionifyDbContextOptionsExtension : IDbContextOptionsExtension {
+        public ExpressionifyDbContextOptionsExtension() { }
 
-        public ExpressionifyDbContextOptionsExtension(ExpressionifyDbContextOptionsExtension copyFrom)
-        {
+        public ExpressionifyDbContextOptionsExtension(ExpressionifyDbContextOptionsExtension copyFrom) {
             EvaluationMode = copyFrom.EvaluationMode;
         }
-        
+
         public DbContextOptionsExtensionInfo Info => new ExtensionInfo(this);
         public ExpressionEvaluationMode EvaluationMode { get; private set; } = ExpressionEvaluationMode.LimitedCompatibilityButCached;
 
-        public void ApplyServices(IServiceCollection services)
-        {
+        public void ApplyServices(IServiceCollection services) {
             if (EvaluationMode == ExpressionEvaluationMode.FullCompatibilityButSlow)
                 AddDecorator<IQueryCompiler, ExpressionableQueryCompiler>(services);
 
@@ -35,8 +30,7 @@ namespace Clave.Expressionify
         }
 
         private static void AddDecorator<TService, TDecorator>(IServiceCollection services)
-            where TDecorator : TService
-        {
+            where TDecorator : TService {
             var descriptor = services.FirstOrDefault(s => s.ServiceType == typeof(TService));
             if (descriptor == null || descriptor.ImplementationType == null && descriptor.ImplementationFactory == null && descriptor.ImplementationInstance == null)
                 throw new InvalidOperationException($"No {typeof(TService).Name} is configured yet. Please configure a database provider first.");
@@ -47,21 +41,18 @@ namespace Clave.Expressionify
                 provider => ActivatorUtilities.CreateInstance(provider, typeof(TDecorator), GetInstance(provider, descriptor)),
                 descriptor.Lifetime));
 
-            static object GetInstance(IServiceProvider provider, ServiceDescriptor descriptor)
-            {
+            static object GetInstance(IServiceProvider provider, ServiceDescriptor descriptor) {
                 return descriptor.ImplementationInstance
                     ?? descriptor.ImplementationFactory?.Invoke(provider)
                     ?? ActivatorUtilities.GetServiceOrCreateInstance(provider, descriptor.ImplementationType!);
             }
         }
 
-        public void Validate(IDbContextOptions options)
-        {
+        public void Validate(IDbContextOptions options) {
             // No options to validate
         }
 
-        public ExpressionifyDbContextOptionsExtension WithEvaluationMode(ExpressionEvaluationMode evaluationMode)
-        {
+        public ExpressionifyDbContextOptionsExtension WithEvaluationMode(ExpressionEvaluationMode evaluationMode) {
             var clone = Clone();
             clone.EvaluationMode = evaluationMode;
             return clone;
@@ -69,33 +60,28 @@ namespace Clave.Expressionify
 
         private ExpressionifyDbContextOptionsExtension Clone() => new(this);
 
-        private class ExtensionInfo : DbContextOptionsExtensionInfo
-        {
+        private class ExtensionInfo : DbContextOptionsExtensionInfo {
             private readonly ExpressionifyDbContextOptionsExtension _extension;
 
-            public ExtensionInfo(ExpressionifyDbContextOptionsExtension extension) : base(extension)
-            {
+            public ExtensionInfo(ExpressionifyDbContextOptionsExtension extension) : base(extension) {
                 _extension = extension;
             }
 
             public override bool IsDatabaseProvider => false;
             public override string LogFragment => string.Empty;
 
-            public override int GetServiceProviderHashCode()
-            {
+            public override int GetServiceProviderHashCode() {
                 // Hash all options here
                 return _extension.EvaluationMode.GetHashCode();
             }
 
-            public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other)
-            {
+            public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other) {
                 // Check if all options are the same
-                return other is ExtensionInfo otherInfo 
+                return other is ExtensionInfo otherInfo
                     && otherInfo._extension.EvaluationMode == _extension.EvaluationMode;
             }
 
-            public override void PopulateDebugInfo(IDictionary<string, string> debugInfo)
-            {
+            public override void PopulateDebugInfo(IDictionary<string, string> debugInfo) {
                 debugInfo["Expressionify:EvaluationMode"] = _extension.EvaluationMode.ToString();
                 // Add values of options here
             }

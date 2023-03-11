@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Clave.Expressionify;
 
-public class ExpressionifyDbContextOptionsBuilder
-{
+public class ExpressionifyDbContextOptionsBuilder {
     private readonly DbContextOptionsBuilder _optionsBuilder;
 
     internal ExpressionifyDbContextOptionsBuilder(DbContextOptionsBuilder optionsBuilder) => _optionsBuilder = optionsBuilder;
@@ -18,8 +17,7 @@ public class ExpressionifyDbContextOptionsBuilder
     /// </summary>
     /// <param name="setAction">An action to set the option.</param>
     /// <returns>The same builder instance so that multiple calls can be chained.</returns>
-    private ExpressionifyDbContextOptionsBuilder WithOption(Func<ExpressionifyDbContextOptionsExtension, ExpressionifyDbContextOptionsExtension> setAction)
-    {
+    private ExpressionifyDbContextOptionsBuilder WithOption(Func<ExpressionifyDbContextOptionsExtension, ExpressionifyDbContextOptionsExtension> setAction) {
         var extension = setAction(_optionsBuilder.Options.FindExtension<ExpressionifyDbContextOptionsExtension>()!);
         ((IDbContextOptionsBuilderInfrastructure)_optionsBuilder).AddOrUpdateExtension(extension);
 

@@ -2,13 +2,10 @@
 using NUnit.Framework;
 using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.AnalyzerVerifier<Clave.Expressionify.Generator.ExpressionifyAnalyzer>;
 
-namespace Clave.Expressionify.Generator.Tests
-{
-    public class AnalyzerTests
-    {
+namespace Clave.Expressionify.Generator.Tests {
+    public class AnalyzerTests {
         [Test]
-        public async Task TestNullPropagationMethod()
-        {
+        public async Task TestNullPropagationMethod() {
             var test = @"
                 namespace ConsoleApplication1
                 {

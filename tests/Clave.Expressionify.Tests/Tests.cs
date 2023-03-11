@@ -9,13 +9,10 @@ using Clave.Expressionify.Tests.Samples;
 using NUnit.Framework;
 using Shouldly;
 
-namespace Clave.Expressionify.Tests
-{
-    public class Tests
-    {
+namespace Clave.Expressionify.Tests {
+    public class Tests {
         [Test]
-        public void TestClass()
-        {
+        public void TestClass() {
             var prop = typeof(Class1).GetProperty("Foo_Expressionify_0", BindingFlags.NonPublic | BindingFlags.Static);
             prop.ShouldNotBeNull();
             var expr = prop.GetValue(null) as Expression<Func<int, int>>;
@@ -24,8 +21,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestRecord()
-        {
+        public void TestRecord() {
             var prop = typeof(Record1).GetProperty("Create_Expressionify_0", BindingFlags.NonPublic | BindingFlags.Static);
             prop.ShouldNotBeNull();
             var expr = prop.GetValue(null) as Expression<Func<string, Record1>>;
@@ -34,15 +30,13 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestNonExpressionify()
-        {
+        public void TestNonExpressionify() {
             typeof(Class2).GetProperties().ShouldBeEmpty();
         }
 
         [Test]
-        public void TestOverload()
-        {
-            typeof(Class3).GetProperties(BindingFlags.NonPublic|BindingFlags.Static).ShouldNotBeEmpty();
+        public void TestOverload() {
+            typeof(Class3).GetProperties(BindingFlags.NonPublic | BindingFlags.Static).ShouldNotBeEmpty();
 
             var prop0 = typeof(Class3).GetProperty("Foo_Expressionify_0", BindingFlags.NonPublic | BindingFlags.Static);
             prop0.ShouldNotBeNull();
@@ -58,8 +52,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestMethodGroup()
-        {
+        public void TestMethodGroup() {
             typeof(Class4).GetProperties(BindingFlags.NonPublic | BindingFlags.Static).ShouldNotBeEmpty();
 
             var prop0 = typeof(Class4).GetProperty("Foo_Expressionify_0", BindingFlags.NonPublic | BindingFlags.Static);
@@ -76,8 +69,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestExpressionifyClass()
-        {
+        public void TestExpressionifyClass() {
             var data = new[]{
                 "1",
                 "2",
@@ -93,8 +85,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestExpressionifyNestedClass()
-        {
+        public void TestExpressionifyNestedClass() {
             var data = new[]{
                 1,
                 2,
@@ -110,8 +101,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestExpressionifyRecord()
-        {
+        public void TestExpressionifyRecord() {
             var data = new[]{
                 "1",
                 "2",
@@ -127,8 +117,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestMethodParameterUsedTwice()
-        {
+        public void TestMethodParameterUsedTwice() {
             var data = new[]{
                 1,
                 2,
@@ -144,8 +133,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestMethodParameterUsedTwiceWithOverload()
-        {
+        public void TestMethodParameterUsedTwiceWithOverload() {
             var data = new[]{
                 1.0,
                 2.0,
@@ -161,8 +149,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestMethodWithMultipleArguments()
-        {
+        public void TestMethodWithMultipleArguments() {
             var data = new[]{
                 new {a = "1", b = "5"},
                 new {a = "3", b = "5"},
@@ -178,8 +165,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestMethodCalledMultipleTimes()
-        {
+        public void TestMethodCalledMultipleTimes() {
             var data = new[]{
                 new {a = "1", b = "5"},
                 new {a = "2", b = "5"},
@@ -195,8 +181,7 @@ namespace Clave.Expressionify.Tests
         }
 
         [Test]
-        public void TestExpressionifiedTwice()
-        {
+        public void TestExpressionifiedTwice() {
             var data = new[]{
                 "1",
                 "2",

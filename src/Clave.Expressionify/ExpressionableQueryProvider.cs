@@ -6,33 +6,27 @@ using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Clave.Expressionify
-{
-    public class ExpressionableQueryProvider : IAsyncQueryProvider
-    {
+namespace Clave.Expressionify {
+    public class ExpressionableQueryProvider : IAsyncQueryProvider {
         private readonly IQueryProvider _underlyingQueryProvider;
 
-        public ExpressionableQueryProvider(IQueryProvider underlyingQueryProvider)
-        {
+        public ExpressionableQueryProvider(IQueryProvider underlyingQueryProvider) {
             _underlyingQueryProvider = underlyingQueryProvider;
         }
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression) => new ExpressionableQuery<TElement>(this, expression);
 
-        public IQueryable CreateQuery(Expression expression)
-        {
-            try
-            {
+        public IQueryable CreateQuery(Expression expression) {
+            try {
                 var type = expression.Type.GetElementType();
 
-                if(type == null) throw new Exception($"Expression type is strange {expression.Type.FullName}");
+                if (type == null) throw new Exception($"Expression type is strange {expression.Type.FullName}");
 
                 return typeof(ExpressionableQuery<>)
                     .MakeGenericType(type)
                     .CreateInstance<IQueryable>(this, expression);
             }
-            catch (System.Reflection.TargetInvocationException e)
-            {
+            catch (System.Reflection.TargetInvocationException e) {
                 throw e.InnerException ?? e;
             }
         }
@@ -45,10 +39,8 @@ namespace Clave.Expressionify
 
         public object? Execute(Expression expression) => _underlyingQueryProvider.Execute(Visit(expression));
 
-        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
-        {
-            if (_underlyingQueryProvider is IAsyncQueryProvider provider)
-            {
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default) {
+            if (_underlyingQueryProvider is IAsyncQueryProvider provider) {
                 return provider.ExecuteAsync<TResult>(Visit(expression), cancellationToken);
             }
 

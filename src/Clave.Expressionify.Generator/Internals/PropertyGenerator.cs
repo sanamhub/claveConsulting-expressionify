@@ -5,17 +5,13 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Clave.Expressionify.Generator.Internals
-{
-    public static class PropertyGenerator
-    {
-        public static PropertyDeclarationSyntax GeneratedName(this PropertyDeclarationSyntax p, int i)
-        {
+namespace Clave.Expressionify.Generator.Internals {
+    public static class PropertyGenerator {
+        public static PropertyDeclarationSyntax GeneratedName(this PropertyDeclarationSyntax p, int i) {
             return p.WithIdentifier(Identifier($"{p.Identifier.Text}_Expressionify_{i}"));
         }
 
-        public static PropertyDeclarationSyntax ToExpressionProperty(this MethodDeclarationSyntax method)
-        {
+        public static PropertyDeclarationSyntax ToExpressionProperty(this MethodDeclarationSyntax method) {
             var parameterTypes = method.ParameterList.Parameters
                 .Select(p => p.Type)
                 .Concat(new[] { method.ReturnType });
@@ -30,8 +26,7 @@ namespace Clave.Expressionify.Generator.Internals
                 .WithTrailingTrivia(Whitespace("\n"));
         }
 
-        private static EqualsValueClauseSyntax GetBody(BaseMethodDeclarationSyntax method)
-        {
+        private static EqualsValueClauseSyntax GetBody(BaseMethodDeclarationSyntax method) {
             return EqualsValueClause(
                 ParenthesizedLambdaExpression(
                     ParameterList(SeparatedList(method.ParameterList.Parameters.Select(p => p.WithModifiers(TokenList())))),

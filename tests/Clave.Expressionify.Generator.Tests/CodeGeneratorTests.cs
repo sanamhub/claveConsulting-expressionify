@@ -5,11 +5,9 @@ using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using Verify = Clave.Expressionify.Generator.Tests.Verifiers.CSharpSourceGeneratorVerifier<Clave.Expressionify.Generator.ExpressionifySourceGenerator>;
 
-namespace Clave.Expressionify.Generator.Tests
-{
+namespace Clave.Expressionify.Generator.Tests {
     [TestFixture]
-    public class CodeGeneratorTests
-    {
+    public class CodeGeneratorTests {
         private const string AttributeCode = @"
         namespace ConsoleApplication1
         {
@@ -71,7 +69,7 @@ namespace ConsoleApplication1
             public static int Foo(int x) => 8;
         }
     }
-}", 
+}",
     @"#nullable enable
 
 namespace ConsoleApplication1
@@ -127,15 +125,12 @@ namespace ConsoleApplication1
         private static System.Linq.Expressions.Expression<System.Func<int, string>> Foo_Expressionify_0 { get; } = (int x) => ""bar"";
     }
 }", TestName = "Nullable enabled but not used")]
-        public async Task TestGenerator(string source, string generated)
-        {
+        public async Task TestGenerator(string source, string generated) {
             await VerifyGenerated(source, generated);
         }
 
-        public async Task VerifyGenerated(string source, string generated)
-        {
-            await new Verify.Test
-            {
+        public async Task VerifyGenerated(string source, string generated) {
+            await new Verify.Test {
                 TestState =
                 {
                     Sources = { source, AttributeCode },

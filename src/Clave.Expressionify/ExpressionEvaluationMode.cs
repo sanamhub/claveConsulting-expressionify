@@ -1,7 +1,6 @@
 ﻿namespace Clave.Expressionify;
 
-public enum ExpressionEvaluationMode
-{
+public enum ExpressionEvaluationMode {
     /// <summary> Always check for <code>[Expressionify]</code> extension methods when executing a query. </summary>
     FullCompatibilityButSlow = 0,
 

@@ -4,14 +4,11 @@ using System.Threading;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
-namespace Clave.Expressionify
-{
-    public class ExpressionableQueryCompiler : IQueryCompiler
-    {
+namespace Clave.Expressionify {
+    public class ExpressionableQueryCompiler : IQueryCompiler {
         private readonly IQueryCompiler _decoratedCompiler;
 
-        public ExpressionableQueryCompiler(IQueryCompiler decoratedCompiler)
-        {
+        public ExpressionableQueryCompiler(IQueryCompiler decoratedCompiler) {
             _decoratedCompiler = decoratedCompiler;
         }
         public Func<QueryContext, TResult> CreateCompiledAsyncQuery<TResult>(Expression query) => _decoratedCompiler.CreateCompiledAsyncQuery<TResult>(Visit(query));

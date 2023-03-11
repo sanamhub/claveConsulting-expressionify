@@ -5,17 +5,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Clave.Expressionify.Generator.Internals
-{
-    public static class ClassGenerator
-    {
+namespace Clave.Expressionify.Generator.Internals {
+    public static class ClassGenerator {
         public static TypeDeclarationSyntax WithOnlyTheseMembers(this TypeDeclarationSyntax type, IEnumerable<MemberDeclarationSyntax> members)
             => TypeDeclaration(type.Kind(), type.Identifier)
                 .WithModifiers(type.Modifiers)
                 .AddMembers(members.ToArray());
 
-        public static SyntaxNode WithOnlyTheseTypes(this SyntaxNode root, IEnumerable<MemberDeclarationSyntax> members)
-        {
+        public static SyntaxNode WithOnlyTheseTypes(this SyntaxNode root, IEnumerable<MemberDeclarationSyntax> members) {
             var namespaceName = root.DescendantNodes()
                 .OfType<NamespaceDeclarationSyntax>()
                 .FirstOrDefault()?.Name

@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace Clave.Expressionify
-{
+namespace Clave.Expressionify {
     [AttributeUsage(AttributeTargets.Method)]
-    public class ExpressionifyAttribute : Attribute
-    {
+    public class ExpressionifyAttribute : Attribute {
     }
 }

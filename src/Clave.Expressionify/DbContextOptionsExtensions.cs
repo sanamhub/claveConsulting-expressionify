@@ -2,17 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Clave.Expressionify
-{
-    public static class DbContextOptionsExtensions
-    {
+namespace Clave.Expressionify {
+    public static class DbContextOptionsExtensions {
         /// <summary>
         /// Use Expressionify within your queries.
         /// Transforms your expressions by replacing any [Expressionify] extension methods with the expressionised versions of those methods.
         /// </summary>
         public static DbContextOptionsBuilder<TContext> UseExpressionify<TContext>(this DbContextOptionsBuilder<TContext> optionsBuilder, Action<ExpressionifyDbContextOptionsBuilder>? expressionifyOptionsAction = null)
-            where TContext : DbContext
-        {
+            where TContext : DbContext {
             return (DbContextOptionsBuilder<TContext>)UseExpressionify((DbContextOptionsBuilder)optionsBuilder, expressionifyOptionsAction);
         }
 
@@ -20,8 +17,7 @@ namespace Clave.Expressionify
         /// Use Expressionify within your queries.
         /// Transforms your expressions by replacing any [Expressionify] extension methods with the expressionised versions of those methods.
         /// </summary>
-        public static DbContextOptionsBuilder UseExpressionify(this DbContextOptionsBuilder optionsBuilder, Action<ExpressionifyDbContextOptionsBuilder>? expressionifyOptionsAction = null)
-        {
+        public static DbContextOptionsBuilder UseExpressionify(this DbContextOptionsBuilder optionsBuilder, Action<ExpressionifyDbContextOptionsBuilder>? expressionifyOptionsAction = null) {
             var extension = GetOrCreateExtension(optionsBuilder);
             ((IDbContextOptionsBuilderInfrastructure)optionsBuilder).AddOrUpdateExtension(extension);
 

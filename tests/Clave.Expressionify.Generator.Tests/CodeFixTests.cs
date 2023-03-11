@@ -2,21 +2,17 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.CodeFixVerifier<Clave.Expressionify.Generator.ExpressionifyAnalyzer, Clave.Expressionify.Generator.ExpressionifyCodeFixProvider>;
 
-namespace Clave.Expressionify.Generator.Tests
-{
-    public class CodeFixTests
-    {
+namespace Clave.Expressionify.Generator.Tests {
+    public class CodeFixTests {
         [Test]
-        public async Task TestNothing()
-        {
+        public async Task TestNothing() {
             var test = @"";
 
             await Verify.VerifyAnalyzerAsync(test);
         }
 
         [Test]
-        public async Task TestOkMethod()
-        {
+        public async Task TestOkMethod() {
             var test = @"
                 namespace ConsoleApplication1
                 {
@@ -34,8 +30,7 @@ namespace Clave.Expressionify.Generator.Tests
         }
 
         [Test]
-        public async Task TestWithoutNamespace()
-        {
+        public async Task TestWithoutNamespace() {
 
             var test = @"
                 public partial class Extensions
@@ -52,8 +47,7 @@ namespace Clave.Expressionify.Generator.Tests
         }
 
         [Test]
-        public async Task TestWithFileScopedNamespace()
-        {
+        public async Task TestWithFileScopedNamespace() {
             var test = @"
                 namespace ConsoleApplication1;
 
@@ -71,8 +65,7 @@ namespace Clave.Expressionify.Generator.Tests
         }
 
         [Test]
-        public async Task TestMissingStatic()
-        {
+        public async Task TestMissingStatic() {
             var test = @"
                 namespace ConsoleApplication1
                 {
@@ -107,8 +100,7 @@ namespace Clave.Expressionify.Generator.Tests
         }
 
         [Test]
-        public async Task TestNotExpressionBody()
-        {
+        public async Task TestNotExpressionBody() {
             var test = @"
                 namespace ConsoleApplication1
                 {
@@ -130,8 +122,7 @@ namespace Clave.Expressionify.Generator.Tests
         }
 
         [Test]
-        public async Task TestNotInPartialClass()
-        {
+        public async Task TestNotInPartialClass() {
             var test = @"
                 namespace ConsoleApplication1
                 {
@@ -148,7 +139,7 @@ namespace Clave.Expressionify.Generator.Tests
             var expected = Verify.Diagnostic(ExpressionifyAnalyzer.PartialClassRule)
                 .WithSpan("/0/Test0.cs", 4, 21, 8, 22);
 
-            await Verify.VerifyAnalyzerAsync(test, new [] { expected });
+            await Verify.VerifyAnalyzerAsync(test, new[] { expected });
 
             var fixtest = @"
                 namespace ConsoleApplication1

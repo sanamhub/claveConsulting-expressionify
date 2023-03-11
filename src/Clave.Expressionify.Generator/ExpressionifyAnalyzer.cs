@@ -1,16 +1,13 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using Clave.Expressionify.Generator.Internals;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Clave.Expressionify.Generator
-{
+namespace Clave.Expressionify.Generator {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ExpressionifyAnalyzer : DiagnosticAnalyzer
-    {
+    public class ExpressionifyAnalyzer : DiagnosticAnalyzer {
         public const string StaticId = "EXPR001";
         public const string ExpressionBodyId = "EXPR002";
         public const string PartialClassId = "EXPR003";
@@ -54,44 +51,38 @@ namespace Clave.Expressionify.Generator
             PartialClassRule,
             NullPropagationRule);
 
-        public override void Initialize(AnalysisContext context)
-        {
+        public override void Initialize(AnalysisContext context) {
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.MethodDeclaration);
         }
 
-        private static void Analyze(SyntaxNodeAnalysisContext context)
-        {
+        private static void Analyze(SyntaxNodeAnalysisContext context) {
             if (!(context.Node is MethodDeclarationSyntax methodDeclaration)) return;
 
             if (!methodDeclaration.HasExpressionifyAttribute()) return;
 
-            if (!methodDeclaration.IsStatic())
-            {
+            if (!methodDeclaration.IsStatic()) {
                 context.ReportDiagnostic(Diagnostic.Create(
                     StaticRule,
                     methodDeclaration.GetLocation(),
                     methodDeclaration.Identifier.ToString()));
             }
 
-            if (!methodDeclaration.HasExpressionBody())
-            {
+            if (!methodDeclaration.HasExpressionBody()) {
                 context.ReportDiagnostic(Diagnostic.Create(
                     ExpressionBodyRule,
                     methodDeclaration.GetLocation(),
                     methodDeclaration.Identifier.ToString()));
             }
 
-            if (methodDeclaration.FindAncestorMissingPartialKeyword() is SyntaxNode typeNode)
-            {
+            if (methodDeclaration.FindAncestorMissingPartialKeyword() is SyntaxNode typeNode) {
                 context.ReportDiagnostic(Diagnostic.Create(
                     PartialClassRule,
                     typeNode.GetLocation()));
             }
 
-            if (methodDeclaration.FindNullPropagationNode() is SyntaxNode memberNode)
-            {
+            if (methodDeclaration.FindNullPropagationNode() is SyntaxNode memberNode) {
                 context.ReportDiagnostic(Diagnostic.Create(
                     NullPropagationRule,
                     memberNode.GetLocation(),
