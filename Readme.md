@@ -8,8 +8,8 @@
 
 Install these two nuget packages:
 
-* `Clave.Expressionify`
-* `Clave.Expressionify.Generator`
+- `Clave.Expressionify`
+- `Clave.Expressionify.Generator`
 
 Make sure to install the second one properly:
 
@@ -25,11 +25,10 @@ Make sure to install the second one properly:
 
 ## How to use
 
-0) Setup your database context with `.UseExpressionify()`
-1) Mark the `public static` expression method with the `[Expressionify]` attribute.
-2) Mark the class with the method as `partial`.
-3) Use the extension method in the query
-
+0. Setup your database context with `.UseExpressionify()`
+1. Mark the `public static` expression method with the `[Expressionify]` attribute.
+2. Mark the class with the method as `partial`.
+3. Use the extension method in the query
 
 ## Example
 
@@ -97,8 +96,8 @@ var users = await db.Users
 
 ### Query caching
 
-When configuring the DbContext with `.UseExpressionify()`, Expressionify tries to use the EntityFramework query cache by default. This way the expression tree is only processed once and then cached. 
-However, this comes with [some limitations](#query-caching-limitations). Expressionify throws an exception if your query cannot be cached. 
+When configuring the DbContext with `.UseExpressionify()`, Expressionify tries to use the EntityFramework query cache by default. This way the expression tree is only processed once and then cached.
+However, this comes with [some limitations](#query-caching-limitations). Expressionify throws an exception if your query cannot be cached.
 To fix this, you either have to call `.Expressionify()` explicitly on the query or disable query caching:
 
 ```csharp
@@ -107,12 +106,13 @@ To fix this, you either have to call `.Expressionify()` explicitly on the query 
 
 ## Upgrading from 3.1 to 5.0
 
-Version 5 works with net 5.0, and has a few other changes. It relies on [Source generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) and Roslyn Analyzers for generating the code, instead of some very clumpsy msbuild code. This means that you will get help if you forget to mark the methods correctly. 
+Version 5 works with net 5.0, and has a few other changes. It relies on [Source generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) and Roslyn Analyzers for generating the code, instead of some very clumpsy msbuild code. This means that you will get help if you forget to mark the methods correctly.
 
 These are the breaking changes:
-* The class containing the method no longer needs to be `static`.
-* The class containing the method now has to be marked as `partial`.
-* The method no longer needs to be `public`, it can be private or internal.
+
+- The class containing the method no longer needs to be `static`.
+- The class containing the method now has to be marked as `partial`.
+- The method no longer needs to be `public`, it can be private or internal.
 
 ## Limitations
 
@@ -127,14 +127,14 @@ public static partial class Extensions {
     // ✔ OK (it can be private)
     [Expressionify]
     private static int ToInt(this string value) => Convert.ToInt32(value);
-    
+
     // ❌ Not ok (it's not static)
     [Expressionify]
     public int ToInt(this string value) => Convert.ToInt32(value);
 
     // ❌ Not ok (it's missing the attribute)
     public static int ToInt(this string value) => Convert.ToInt32(value);
-    
+
     // ❌ Not ok (it doesn't have an expression body)
     [Expressionify]
     public static int ToInt(this string value)
@@ -156,6 +156,7 @@ public static class Extensions {
 Using [query caching](#query-caching) works fine unless you introduce new query parameters in your `[Expressionify]` method. In that case you'll get an `InvalidOperationException` telling you to explicitly call `.Expressionify()` on the query, as the query cannot be translated.
 
 Examples:
+
 ```csharp
 public static partial class Extensions {
    // Example: users.Where(u => u.IsOver18())
@@ -197,13 +198,11 @@ public static partial class Extensions {
 
 ## Inspiration and help
 
-The first part of this project relies heavily on the work done by [Luke McGregor](https://twitter.com/staticv0id) in his [LinqExpander](https://github.com/lukemcgregor/LinqExpander) project, as described in his article on [composable repositories - nesting expressions](https://blog.staticvoid.co.nz/2016/composable_repositories_-_nesting_extensions/), and on the updated code by [Ben Cull](https://twitter.com/BenWhoLikesBeer) in his article [Expression and Projection Magic for Entity Framework Core ](https://benjii.me/2018/01/expression-projection-magic-entity-framework-core/).
+The first part of this project relies heavily on the work done by [Luke McGregor](https://twitter.com/staticv0id) in his [LinqExpander](https://github.com/lukemcgregor/LinqExpander) project, as described in his article on [composable repositories - nesting expressions](https://blog.staticvoid.co.nz/2016/composable_repositories_-_nesting_extensions/), and on the updated code by [Ben Cull](https://twitter.com/BenWhoLikesBeer) in his article [Expression and Projection Magic for Entity Framework Core](https://benjii.me/2018/01/expression-projection-magic-entity-framework-core/).
 
 The second part of this project uses Roslyn to analyze and generate code, and part of it is built directly on code by [Carlos Mendible](https://twitter.com/cmendibl3) from his article [Create a class with .NET Core and Roslyn](https://carlos.mendible.com/2017/03/02/create-a-class-with-net-core-and-roslyn/).
 
 The rest is stitched together from various Stack Overflow answers and code snippets found on GitHub.
-
-
 
 [1]: https://www.nuget.org/packages/Clave.Expressionify/
 [2]: https://claveconsulting.visualstudio.com/Nugets/_build/latest?definitionId=14

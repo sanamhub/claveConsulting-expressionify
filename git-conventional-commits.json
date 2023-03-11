@@ -17,13 +17,7 @@
     "issueRegexPattern": "(^|\\s)#\\d+(\\s|$)"
   },
   "changelog": {
-    "commitTypes": [
-      "feat",
-      "fix",
-      "perf",
-      "merge",
-      "?"
-    ],
+    "commitTypes": ["feat", "fix", "perf", "merge", "?"],
     "commitScopes": [],
     "commitIgnoreRegexPattern": "^(WIP|chore)",
     "includeInvalidCommits": false,
